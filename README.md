@@ -10,4 +10,4 @@
 * [贪心算法](/greedy)
 * [动态规划](/dynamic%20programming)
 * [树](/tree)
-* [SQL](/sql)
+* [SQL](/database)
