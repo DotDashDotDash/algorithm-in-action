@@ -6,8 +6,8 @@
 
 ### 目录
 
-* [分治算法](/divide%20and%20conquer)
+* [动态规划](/dynamic)
 * [贪心算法](/greedy)
-* [动态规划](/dynamic%20programming)
-* [树](/tree)
-* [SQL](/database)
+* [数据库](/database)
+* [二叉树](/tree)
+* [分治法](/recursion)
