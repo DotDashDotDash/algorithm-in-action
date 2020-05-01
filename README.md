@@ -1,4 +1,4 @@
-## :fire:算法刷题
+## :fire:Algorithm Every Day
 
 ### 前言
 
