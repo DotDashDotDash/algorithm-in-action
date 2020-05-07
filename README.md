@@ -1,13 +1,15 @@
-## :fire:Algorithm Every Day
+<div align=center><img src="./assets/icon.jpg" width=400 height=300/></div>
 
-### 前言
+-----------------------------
 
-坚持每日10道算法题，争做优秀程序员
+## 前言
 
-### 目录
+这是一个记录个人算法刷题的仓库，每天3道题左右，大家一起争做优秀程序员
 
-* [动态规划](/dynamic)
-* [贪心算法](/greedy)
-* [数据库](/database)
-* [二叉树](/tree)
-* [分治法](/recursion)
+## 目录
+
+* [贪心算法](greedy/README.md)
+* [递归算法](recursion/README.md)
+* [动态规划](dynamic/README.md)
+* [树专题](tree/README.md)
+* [数据库专题](database/README.md)
