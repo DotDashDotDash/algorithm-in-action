@@ -8,8 +8,3 @@
 
 ## 目录
 
-* [贪心算法](greedy/README.md)
-* [递归算法](recursion/README.md)
-* [动态规划](dynamic/README.md)
-* [树专题](tree/README.md)
-* [数据库专题](database/README.md)
