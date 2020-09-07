@@ -1,0 +1,121 @@
+## 验证IP地址
+
+### 题目描述
+
+编写一个函数来验证输入的字符串是否是有效的 IPv4 或 IPv6 地址。
+
+IPv4 地址由十进制数和点来表示，每个地址包含4个十进制数，其范围为 0 - 255， 用(".")分割。比如，172.16.254.1；
+
+同时，IPv4 地址内的数不会以 0 开头。比如，地址 172.16.254.01 是不合法的。
+
+IPv6 地址由8组16进制的数字来表示，每组表示 16 比特。这些组数字通过 (":")分割。比如,  2001:0db8:85a3:0000:0000:8a2e:0370:7334 是一个有效的地址。而且，我们可以加入一些以 0 开头的数字，字母可以使用大写，也可以是小写。所以， 2001:db8:85a3:0:0:8A2E:0370:7334 也是一个有效的 IPv6 address地址 (即，忽略 0 开头，忽略大小写)。
+
+然而，我们不能因为某个组的值为 0，而使用一个空的组，以至于出现 (::) 的情况。 比如， 2001:0db8:85a3::8A2E:0370:7334 是无效的 IPv6 地址。
+
+同时，在 IPv6 地址中，多余的 0 也是不被允许的。比如， 02001:0db8:85a3:0000:0000:8a2e:0370:7334 是无效的。
+
+说明: 你可以认为给定的字符串里没有空格或者其他特殊字符。
+
+**示例 1:**
+
+```tex
+输入: "172.16.254.1"
+输出: "IPv4"
+解释: 这是一个有效的 IPv4 地址, 所以返回 "IPv4"。
+```
+
+**示例 2:**
+
+```tex
+输入: "2001:0db8:85a3:0:0:8A2E:0370:7334"
+输出: "IPv6"
+解释: 这是一个有效的 IPv6 地址, 所以返回 "IPv6"。
+```
+
+**示例 3:**
+
+```tex
+输入: "256.256.256.256"
+输出: "Neither"
+解释: 这个地址既不是 IPv4 也不是 IPv6 地址。
+```
+
+### AC
+
+```c++
+class Solution{
+    public:
+    	int check(string &s, char a){
+            int cnt = 0;	//统计出现的次数
+            if(a == '.'){	//这里是对IPV4的判断过程，cnt统计.的次数
+                for(auto c : s){
+                    if(c == a)
+                        cnt++;
+                    if(c != a && !isdigit(c)){
+                        //此时说明c既不是.也不是数字，c肯定是无效的字符
+                        cnt = 0;
+                        break;
+                    }
+                }
+            }else if(a == ':'){
+                for(auto c : s){
+                    if(c == a)
+                        cnt++;
+                    else{
+                        if(!(isdigit(c) || (isalpha(c) && 'A' <= toupper(c) && 'G' >= toupper(c)))){
+                            cnt = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+            return cnt;	//用来判断是IPV4还是IPV6，若cnt=4是IPV4，若cnt=6是IPV6
+        }
+    	
+    	string validIPAddress(string IP){
+            if(IP.find(".") != string::npos)	//判断IPV4
+                return validIPV4(IP);
+            return validIPV6(IP);
+        }
+    	
+    	string validIPV4(string IP){
+            if(check(IP, '.') != 3)	//IPV4有3个.
+                return "Neither";
+            int cnt = 0;
+            stringstream ss;
+            ss << IP;
+            string tmp;
+            //getline可以用指定分隔符分割数据流
+            while(getline(ss, tmp, '.')){
+                cnt++;
+                //防止测试数据出现“-0”这种诡异的数字而导致stoi测试不出来
+                if(tmp == "" || (tmp.size() > 1 && (tmp[0] < 1 || tmp[0] > '9')) || tmp.size() > 4)
+                    return "Neither";
+                int t = stoi(tmp);
+                if(t < 0 || t > 255)
+                    return "Neither";
+            }
+            return cnt == 4 ? "IPv4" : "Neither";
+        }
+    
+    	string validIPV6(string IP){
+            if(check(IP, ":") != 7)
+                return "Neither";
+            int cnt = 0;
+            stringstream ss;
+            ss << IP;
+            string tmp;
+            while(getline(ss, tmp, ":")){
+                cnt++;
+                if(tmp == "")
+                    return "Neither";
+                if(tmp.size() > 4)
+                    return "Neither";
+            }
+            return "IPv6";
+        }
+}
+```
+
+
+
