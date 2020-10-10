@@ -11,6 +11,7 @@
     * [Q3.一个递增单链表和一个递减单链表哦合并成一个递增单链表](####q3一个递增单链表和一个递减单链表哦合并成一个递增单链表)
     * [Q4.两个循环单链表合并成一个循环单链表](####两个循环单链表合并成一个循环单链表)
   * [1.2线性表的集合类操作问题](##1-2线性表的集合类操作问题)
+    * [Q1.求两个递增单链表的元素的交集](####q1求两个递增单链表的元素的交集)
   * [1.3线性表的排序问题](##1-3线性表的排序问题)
   * [1.4线性表的重复值问题](##1-4线性表的重复值问题)
 
@@ -124,6 +125,70 @@ void Merge_Cycle(List* &la, List* &lb， int m, int n){
         ta = la->next;
         la->next = lb->next;
         q->next = ta;
+    }
+}
+```
+
+## 1.2线性表的集合类操作问题
+
+#### Q1.求两个递增单链表的元素的交集
+
+```cpp
+//假设la和lb均带头节点，将所求交集保存到la中
+void List_Inter(List* &la, List* &lb){
+    List *p = la->next, *q = lb->next, *prev;	//prev用来保存已求交集的最后一个元素，用来判重
+    List *na, *nb;	//na和nb用来保存下一个节点的
+    la->next = NULL;	//把la清理出来
+    while(p && q){
+        if(p->data < q->data){ //说明p的值小了，需要让p前移来找和q相等的节点
+            while(p->data < q->data)
+                p = p->next;
+            if(p->data > q->data){	//p移过了
+                q = q->next;	//只能把q往后移，进行下一个循环
+                continue;
+            }
+        }else if(p->data > q->data){	//说明q的值笑了，需要让q前移来找和p相等的点
+            while(p->data > q->data)
+                q = q->next;
+            if(p->data < q->data){	//q移过了
+                p = p->next;	//只能把p往后移，进行下一个循环
+                continue;
+            }
+        }
+        //此时说明p和q相等，
+        na = p->next;	//保存当前la工作指针的下一个指针位置
+        p->next = NULL;	//把p提取出来
+        if(prev == NULL){	//说明是第一次插入新的la
+            la->next = p;
+            prev = p;	//更新prev
+        }else{
+            prev->next = p;
+            prev = p;
+        }
+        p = na;			//p继续更新
+        q = q->next;	//q继续更新
+    }
+    //la或者lb有一个访问完了
+    if(p){	//如果la没有访问完
+        while(p){
+            if(p->data == prev->data)
+                continue;	//重了，继续前进
+            na = p->next;
+            p->next = NULL;
+            prev->next = p;
+            prev = p;
+            p = na;
+        }
+    }else{	//如果lb没有访问完
+        while(q){
+            if(q->data == prev->data)
+                continue;
+            nb = q->next;
+            q->next = NULL;
+            prev->next = q;
+            prev = q;
+            q = nb;
+        }
     }
 }
 ```
