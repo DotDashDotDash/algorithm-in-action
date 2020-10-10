@@ -21,5 +21,30 @@
 
 #### Q1.两个递增单链表合并成递减单链表
 
+```cpp
+//假设la和lb带头节点
+void Merge_Desc(List* &la, List* &lb){
+    List *p = la->next, *q = lb->next;	//p,q分别为链表la和lb的工作指针
+    la->next = null;	//la作结果链表，先将结果链表初始化为空
+    while(p && q){		//两个链表均不为空指针
+        if(p->data <= q->data){
+            List *tmp = p->next;
+            p->next = la->next;
+            la->next = tmp;
+            p = tmp;
+        }else{
+            if(p)
+                q = p;
+            while(q){
+                List *tmp = q->next;
+                q->next = la->next;
+                la->next = q;
+                q = tmp;
+            }
+        }
+    }
+}
+```
+
 
 
