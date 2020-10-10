@@ -9,6 +9,7 @@
     * [Q1.两个递增单链表合并成递减单链表](####q1两个递增单链表合并成递减单链表)
     * [Q2.两个递增单链表合并成递增单链表](####q2两个递增单链表合并成递增单链表)
     * [Q3.一个递增单链表和一个递减单链表哦合并成一个递增单链表](####q3一个递增单链表和一个递减单链表哦合并成一个递增单链表)
+    * [Q4.两个循环单链表合并成一个循环单链表](####两个循环单链表合并成一个循环单链表)
   * [1.2线性表的集合类操作问题](##1-2线性表的集合类操作问题)
   * [1.3线性表的排序问题](##1-3线性表的排序问题)
   * [1.4线性表的重复值问题](##1-4线性表的重复值问题)
@@ -89,9 +90,41 @@ void Merge_Asc(List* &la, List* &lb){
 #### Q4.一个递增单链表和一个递减单链表哦合并成一个递增单链表
 
 ```cpp
-//假设la和lb带头节点
+//假设la和lb带头节点，要求用O(m+n)的时间复杂度，假设la递增，lb递减
 void Merge_Diverse(List* &la, List* &lb){
-    
+    //首先先把lb逆序成递增
+    List *p = la->next, *q = lb->next, *tmp;
+    while(q){
+        tmp = q->next;
+        q->next = lb->next;
+        lb->next = q;
+        q = tmp;
+    }
+    Merge_Asc(la, lb);	//转化为将两个递增单链表合并成递增单链表
+}
+```
+
+#### Q4.两个循环单链表合并成一个循环单链表
+
+```cpp
+//两个带头节点的循环单链表la和lb，以及他们的长度m和n，用最快的速度合并
+void Merge_Cycle(List* &la, List* &lb， int m, int n){
+    List *p = la->next, *q = lb->next;
+    List *ta, *tb;
+    //找到最短的节点的尾节点，插入到另一个链表的头部
+    if(m < n){	//la比lb短
+        while(p != la->next)
+            p = p->next;
+        tb = lb->next;	//保存lb的第一个节点
+        lb->next = la->next;	//将la头插到lb
+        p->next = tb;	//将lb第一个节点链接到la的尾部
+    }else{	//lb短
+        while(q != lb->next)
+            q = q->next;
+        ta = la->next;
+        la->next = lb->next;
+        q->next = ta;
+    }
 }
 ```
 
