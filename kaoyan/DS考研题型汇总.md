@@ -6,12 +6,13 @@
 
 * [一、线性表](#一线性表)
   * [1.1线性表的合并问题](##11线性表的合并问题)
-    * [Q1.两个递增单链表合并成递减单链表](####q1两个递增单链表合并成递减单链表)
+    * [1.1.1两个递增单链表合并成递减单链表](####111两个递增单链表合并成递减单链表)
     * [Q2.两个递增单链表合并成递增单链表](####q2两个递增单链表合并成递增单链表)
     * [Q3.一个递增单链表和一个递减单链表哦合并成一个递增单链表](####q3一个递增单链表和一个递减单链表哦合并成一个递增单链表)
     * [Q4.两个循环单链表合并成一个循环单链表](####两个循环单链表合并成一个循环单链表)
   * [1.2线性表的集合类操作问题](##1-2线性表的集合类操作问题)
     * [Q1.求两个递增单链表的元素的交集](####q1求两个递增单链表的元素的交集)
+    * [Q2.求两个递增单链表的元素的并集](####q2求两个递增单链表的元素的并集)
   * [1.3线性表的排序问题](##1-3线性表的排序问题)
   * [1.4线性表的重复值问题](##1-4线性表的重复值问题)
 
@@ -23,7 +24,7 @@
 
 ## 1.1线性表的合并问题
 
-#### Q1.两个递增单链表合并成递减单链表
+#### 1.1.1两个递增单链表合并成递减单链表
 
 ```cpp
 //假设la和lb带头节点，因为是采用头插法，因此小的元素会被优先插入
@@ -138,7 +139,7 @@ void Merge_Cycle(List* &la, List* &lb， int m, int n){
 void List_Inter(List* &la, List* &lb){
     List *p = la->next, *q = lb->next, *prev;	//prev用来保存已求交集的最后一个元素，用来判重
     List *na, *nb;	//na和nb用来保存下一个节点的
-    la->next = NULL;	//把la清理出来
+    la->next = prev = NULL;	//把la清理出来
     while(p && q){
         if(p->data < q->data){ //说明p的值小了，需要让p前移来找和q相等的节点
             while(p->data < q->data)
@@ -185,6 +186,74 @@ void List_Inter(List* &la, List* &lb){
                 continue;
             nb = q->next;
             q->next = NULL;
+            prev->next = q;
+            prev = q;
+            q = nb;
+        }
+    }
+}
+```
+
+#### Q2. 求两个递增单链表的元素的并集
+
+```cpp
+void List_Union(List* &la, List* &lb){
+    List *p = la->next, *q = lb->next;
+    List *na, *nb;	//na和nb用来保存下一个指针的地址
+    List *prev = NULL;	//prev用来判重，表示union的最后一个元素
+    la->next = NULL;	//把la清理出来
+    while(p && q){
+        if(p->data < q->data){
+            if(prev == NULL){	//新的la的第一个元素
+                na = p->next;
+                p->next = NULL;
+                la->next = p;
+                prev = p;
+                p = na;
+            }else{	//已经有元素了
+                if(prev->data == p->data)
+                    continue;	//元素重复，直接忽略
+                na = p->next;
+                p->next = NULL;
+                prev->next = p;
+                prev = p;
+                p = na;
+            }
+        }else{
+            if(prev == NULL){
+                nb = q->next;
+                q->next = NULL;
+                lb->next = q;
+                prev = q;
+                q = nb;
+            }else{
+                if(prev->data == q->data)
+                    continue;
+                nb = q->next;
+                q->next == NULL;
+                prev->next = q;
+                prev = q;
+                q = nb;
+            }
+        }
+    }
+    //la和lb有一个访问完了
+    if(p){
+        while(p){
+            if(prev->data == p->data)
+                continue;
+            na = p->next;
+            p->next = NULL;
+            prev->next = p;
+            prev = p;
+            p = na;
+        }
+    }else{
+        while(q){
+            if(prev->data == q->data)
+                continue;
+            nb = q->next;
+            q->next == NULL;
             prev->next = q;
             prev = q;
             q = nb;
